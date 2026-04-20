@@ -1,11 +1,19 @@
-async function createChat(req, res) {
-  const { message } = req.body;
+const chatModel = require("../models/chat.model");
 
-  // Placeholder controller to keep route functional until chat logic is implemented.
-  return res.status(200).json({
-    message: "Chat endpoint is working",
-    input: message ?? null,
-  });
+async function createChat (req, res) {
+  const { title } = req.body;
+  const user = req.user;
+  const chat = await chatModel.create({
+    user: user._id,
+    title
+  })
+  res.status(201).json({
+    message: "Chat created successfully", chat: {
+      _id: chat._id,
+      title: chat.title,
+      lastActivity: chat.lastActivity,
+     user:chat.user
+  } })
 }
 
 module.exports = {
